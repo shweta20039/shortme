@@ -35,31 +35,30 @@ func shortURL(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("read short request error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusInternalServerError)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
 		w.Write(errMsg)
 		return
 	}
 
-	var shortReq ShortReq
+	var shortReq shortReq
 	err = json.Unmarshal(body, &shortReq)
 	if err != nil {
 		log.Printf("parse short request error. %v", err)
 		w.WriteHeader(http.StatusBadRequest)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusBadRequest)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusBadRequest)})
 		w.Write(errMsg)
 		return
 	}
-
 	var shortenedURL string
 	shortenedURL, err = short.Shorter.Short(shortReq.LongURL)
 	if err != nil {
 		log.Printf("short url error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusInternalServerError)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
 		w.Write(errMsg)
 		return
 	} else {
-		shortResp, _ := json.Marshal(ShortResp{ShortURL: shortenedURL})
+		shortResp, _ := json.Marshal(shortResp{ShortURL: shortenedURL})
 		w.Write(shortResp)
 	}
 }
@@ -71,17 +70,17 @@ func expandURL(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("read expand request error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusInternalServerError)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
 		w.Write(errMsg)
 		return
 	}
 
-	var expandReq ExpandReq
+	var expandReq expandReq
 	err = json.Unmarshal(body, &expandReq)
 	if err != nil {
 		log.Printf("parse expand request error. %v", err)
 		w.WriteHeader(http.StatusBadRequest)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusBadRequest)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusBadRequest)})
 		w.Write(errMsg)
 		return
 	}
@@ -91,11 +90,11 @@ func expandURL(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("expand url error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg, _ := json.Marshal(Err{Msg: http.StatusText(http.StatusInternalServerError)})
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
 		w.Write(errMsg)
 		return
 	} else {
-		expandResp, _ := json.Marshal(ExpandResp{LongURL: expandedURL})
+		expandResp, _ := json.Marshal(expandResp{LongURL: expandedURL})
 		w.Write(expandResp)
 	}
 }
@@ -104,8 +103,8 @@ func expandURL(w http.ResponseWriter, r *http.Request) {
 func Start() {
 	log.Println("api starts")
 	r := mux.NewRouter()
-	r.HandleFunc("/version", version).Methods(http.MethodGet)
-	r.HandleFunc("/health", healthCheck).Methods(http.MethodGet)
+	r.HandleFunc("/version", checkVersion).Methods(http.MethodGet)
+	r.HandleFunc("/health", checkHealth).Methods(http.MethodGet)
 	r.HandleFunc("/short", shortURL).Methods(http.MethodPost).HeadersRegexp("Content-Type",	"application/json")
 	r.HandleFunc("/expand", expandURL).Methods(http.MethodPost).HeadersRegexp("Content-Type", "application/json")
 	r.HandleFunc("/{shortenedURL:[a-zA-Z0-9]{1,11}}", redirect).Methods(http.MethodGet)

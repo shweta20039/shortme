@@ -1,27 +1,27 @@
 package api
 
 
-type Version struct {
+type version struct {
 	Version string `json:"version"`
 }
 
-type Err struct {
+type errorResp struct {
 	Msg string `json:"msg"`
 }
 
-type ShortReq struct {
+type shortReq struct {
 	LongURL	string `json:"longURL"`
 }
 
-type ShortResp struct {
+type shortResp struct {
 	ShortURL	string	`json:"shortURL"`
 }
 
-type ExpandReq struct {
+type expandReq struct {
 	ShortURL	string	`json:"shortURL"`
 }
 
-type ExpandResp struct {
+type expandResp struct {
 	LongURL 	string	`json:"longURL"`
 }
 

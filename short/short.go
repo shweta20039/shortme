@@ -111,13 +111,14 @@ func (shorter *shorter) Expand(shortURL string) (longURL string, err error) {
 
 func (shorter *shorter) Short(longURL string) (shortURL string, err error) {
 	for {
-		seq, err := shorter.sequence.NextSequence()
+		var seq uint64
+		seq, err = shorter.sequence.NextSequence()
 		if err != nil {
 			log.Printf("get next sequence error. %v", err)
 			return "", errors.New("get next sequence error")
 		}
 
-		shortURL = base.Int2String(seq - 1)
+		shortURL = base.Int2String(seq)
 		if _, exists := conf.Conf.Common.BlackShortURLsMap[shortURL]; exists {
 			continue
 		} else {

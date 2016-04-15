@@ -44,7 +44,7 @@ func (dbSeq *SequenceDB) Close() {
 
 func (dbSeq *SequenceDB) NextSequence() (sequence uint64, err error) {
 	var stmt *sql.Stmt
-	stmt, err = dbSeq.db.Prepare(`REPLACE INTO sequence(stub) values ("sequence")`)
+	stmt, err = dbSeq.db.Prepare(`REPLACE INTO sequence(stub) VALUES ("sequence")`)
 	if err != nil {
 		log.Printf("sequence db prepare error. %v", err)
 		return 0, err
@@ -66,6 +66,9 @@ func (dbSeq *SequenceDB) NextSequence() (sequence uint64, err error) {
 		return 0, err
 	} else {
 		sequence = uint64(lastID)
+		// mysql sequence will start at 1, we actually want it to be
+		// started at 0. :)
+		sequence -= 1
 		return sequence, nil
 	}
 }

@@ -9,13 +9,13 @@ import (
 	"github.com/andyxning/shortme/conf"
 )
 
-func version(w http.ResponseWriter, r *http.Request) {
+func checkVersion(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	versionInfo, _ := json.Marshal(Version{Version: conf.Version})
+	versionInfo, _ := json.Marshal(version{Version: conf.Version})
 	w.Write(versionInfo)
 }
 
-func healthCheck(w http.ResponseWriter, r *http.Request) {
+func checkHealth(w http.ResponseWriter, r *http.Request) {
 	tpl := template.New("health.html")
 	var err error
 	tpl, err = tpl.ParseFiles("static/template/health.html")

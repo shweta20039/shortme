@@ -8,13 +8,18 @@ ShortMe is ready to be used in production. Have fun with it. :)
 
 ### Features
 ----
+* Convert same long urls to different short urls.
 * Api support
-* short url black list.
+* Short url black list
     * To avoid some words, like `f**k` and `stupid`
-    * To make sure that apis such as `/version` and `/health` will only be 
+    * To make sure that apis such as `/version` and `/health` will only be
     used as api not short urls or otherwise when requesting `http://127.0.0
-    .1:3030/version`, version info will be returned rather the long url 
+    .1:3030/version`, version info will be returned rather the long url
     corresponding to the short url "version".
+* Base string config in configuration file
+    * **Once this base string is specified, it can not be reconfiged anymore
+    otherwise the shortened urls may not be unique and thus may conflict with
+     previous ones.**
 
 ### Implementation
 ----
@@ -162,3 +167,75 @@ After setting up the databases and before running `shortme`, make sure that the 
 ----
 * make sure that `static` directory will be at the same directory as `shortme`
 * `./shortme -c config.conf`
+
+### Deploy
+----
+
+#### Sequence Database
+In the [Flickr blog](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/),
+Flickr suggests that we can use two databases with one for even sequence and
+the other one for odd sequence. This will make sequence generator being more
+available in case one database is down and will also spread the load about
+generate sequence. After splitting sequence db from one to more, we can use 
+[HaProxy](http://www.haproxy.org/) as a reverse proxy and thus more sequence 
+databases can be used as one. As for load balance algorithm, i think **round 
+robin** is good enough for this situation.
+
+In two databases situation, we should add the following configuration to each
+ database configuration file.
+* First database
+   
+```
+auto_increment_offset 0
+auto_increment_increment 2
+```
+
+* Second databse
+
+```
+auto_increment_offset 1
+auto_increment_increment 2
+```
+
+Then each time to generate a sequence counter, we can execute below sql 
+statement:  
+`replace into sequence(stub) values("sequence")`
+
+In cases we use three databases as sequence counter generator, we should 
+insert a record for each table in two databases.
+* First database
+
+```
+auto_increment_offset 0
+auto_increment_increment 3
+```
+
+* Second database
+
+```
+auto_increment_offset 1
+auto_increment_increment 3
+```
+
+* Third database
+
+```
+auto_increment_offset 2
+auto_increment_increment 3
+```
+
+Then each time to generate a sequence id, we can execute below sql statement:  
+`replace into sequence(stub) values("sequence")`
+
+Ok, i think you get the point. When using `N` databases to generate sequence 
+counter, configuration for each database configuration file will just 
+like below:
+
+```
+for i := range N {
+    add "auto_increment_offset i" to config file 
+    add "auto_increment_increment N" to config file
+}
+
+```
+So, sequence generator can be horizontally scalable.
