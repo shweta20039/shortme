@@ -6,6 +6,16 @@ ShortMe is a url shortening service written in Golang.
 It is with high performance and scalable.  
 ShortMe is ready to be used in production. Have fun with it. :)
 
+### Features
+----
+* Api support
+* short url black list.
+    * To avoid some words, like `f**k` and `stupid`
+    * To make sure that apis such as `/version` and `/health` will only be 
+    used as api not short urls or otherwise when requesting `http://127.0.0
+    .1:3030/version`, version info will be returned rather the long url 
+    corresponding to the short url "version".
+
 ### Implementation
 ----
 Currently, afaik, there are three ways to implement short url service.

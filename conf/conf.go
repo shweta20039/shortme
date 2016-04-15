@@ -19,17 +19,23 @@ type http struct {
 	Listen string `toml:"listen"`
 }
 
-type ShortDB struct {
+type shortDB struct {
 	ReadDSN string `toml:"read_dsn"`
 	WriteDSN string `toml:"write_dsn"`
 	MaxIdleConns int `toml:"max_idle_conns"`
 	MaxOpenConns int `toml:"max_open_conns"`
 }
 
+type common struct {
+	BlackShortURLs []string `toml:"black_short_urls"`
+	BlackShortURLsMap map[string]bool
+}
+
 type config struct {
 	Http http `toml:"http"`
 	SequenceDB sequenceDB `toml:"sequence_db"`
-	ShortDB ShortDB `toml:"short_db"`
+	ShortDB shortDB `toml:"short_db"`
+	Common common `toml:"common"`
 }
 
 var Conf config
@@ -56,5 +62,10 @@ func MustParseConfig(configFile string) {
 	err = toml.Unmarshal(content, &Conf)
 	if err != nil {
 		log.Panicf("unmarshal toml object error. %v", err)
+	}
+
+	Conf.Common.BlackShortURLsMap = make(map[string]bool)
+	for _, blackShortURL := range Conf.Common.BlackShortURLs {
+		Conf.Common.BlackShortURLsMap[blackShortURL] = true
 	}
 }
