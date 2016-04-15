@@ -152,9 +152,11 @@ max_open_conns = 8
 ```
 #### Capacity
 ----
-We use an Mysql `unsigned bigint` type to store the sequence id. According to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) we can get `18446744073709551616` different integers. However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) the returned auto increment integer can only be `int64` which will make the sequence smaller than `uint64`. Even through, we can still get `9223372036854775808` different integers and this will be large enough for most service.  
+We use an Mysql `unsigned bigint` type to store the sequence counter. According
+ to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) we can get `18446744073709551616` different integers. However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) the returned auto increment integer can only be `int64` which will make the sequence smaller than `uint64`. Even through, we can still get `9223372036854775808` different integers and this will be large enough for most service.  
 
-Supposing that  we consume `100,000,000` short urls one day, then the sequence id can last for `2 ** 63 / 100000000 / 365 = 252695124` years.
+Supposing that  we consume `100,000,000` short urls one day, then the 
+sequence counter can last for `2 ** 63 / 100000000 / 365 = 252695124` years.
 
 #### Grant
 ----
@@ -172,6 +174,7 @@ After setting up the databases and before running `shortme`, make sure that the 
 ----
 
 #### Sequence Database
+----
 In the [Flickr blog](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/),
 Flickr suggests that we can use two databases with one for even sequence and
 the other one for odd sequence. This will make sequence generator being more
@@ -224,7 +227,8 @@ auto_increment_offset 2
 auto_increment_increment 3
 ```
 
-Then each time to generate a sequence id, we can execute below sql statement:  
+Then each time to generate a sequence counter, we can execute below sql 
+statement:  
 `replace into sequence(stub) values("sequence")`
 
 Ok, i think you get the point. When using `N` databases to generate sequence 
@@ -239,3 +243,4 @@ for i := range N {
 
 ```
 So, sequence generator can be horizontally scalable.
+
