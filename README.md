@@ -1,4 +1,4 @@
-![](logo.png)
+![](logo.png)  
 ![](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ### Introduction
 ----
@@ -138,6 +138,7 @@ max_open_conns = 8
 #### Capacity
 ----
 We use an Mysql `unsigned bigint` type to store the sequence id. According to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) we can get `18446744073709551616` different integers. However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) the returned auto increment integer can only be `int64` which will make the sequence smaller than `uint64`. Even through, we can still get `9223372036854775808` different integers and this will be large enough for most service.  
+
 Supposing that  we consume `100,000,000` short urls one day, then the sequence id can last for `2 ** 63 / 100000000 / 365 = 252695124` years.
 
 #### Grant
