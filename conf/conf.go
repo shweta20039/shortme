@@ -29,6 +29,8 @@ type shortDB struct {
 type common struct {
 	BlackShortURLs []string `toml:"black_short_urls"`
 	BlackShortURLsMap map[string]bool
+	BaseString string `toml:"base_string"`
+	BaseStringLength uint64
 }
 
 type config struct {
@@ -64,8 +66,12 @@ func MustParseConfig(configFile string) {
 		log.Panicf("unmarshal toml object error. %v", err)
 	}
 
+	// short url black list
 	Conf.Common.BlackShortURLsMap = make(map[string]bool)
 	for _, blackShortURL := range Conf.Common.BlackShortURLs {
 		Conf.Common.BlackShortURLsMap[blackShortURL] = true
 	}
+
+	// base string
+	Conf.Common.BaseStringLength = uint64(len(Conf.Common.BaseString))
 }
