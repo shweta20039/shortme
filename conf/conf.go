@@ -31,6 +31,7 @@ type common struct {
 	BlackShortURLsMap map[string]bool
 	BaseString string `toml:"base_string"`
 	BaseStringLength uint64
+	DomainName string `toml:"domain_name"`
 }
 
 type config struct {

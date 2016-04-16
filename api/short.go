@@ -2,6 +2,7 @@ package api
 
 import (
 	"log"
+	"net/url"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
@@ -10,6 +11,7 @@ import (
 	"github.com/andyxning/shortme/conf"
 
 	"github.com/gorilla/mux"
+	"strings"
 )
 
 func redirect(w http.ResponseWriter, r *http.Request) {
@@ -49,6 +51,29 @@ func shortURL(w http.ResponseWriter, r *http.Request) {
 		w.Write(errMsg)
 		return
 	}
+
+	var longURL *url.URL
+	longURL, err = url.Parse(shortReq.LongURL)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		errMsg, _ := json.Marshal(errorResp{Msg: "requested url is malformed"})
+		w.Write(errMsg)
+		return
+	} else {
+		if longURL.Host == conf.Conf.Common.DomainName {
+			w.WriteHeader(http.StatusBadRequest)
+			errMsg, _ := json.Marshal(errorResp{Msg: "requested url is already shortened"})
+			w.Write(errMsg)
+			return
+		}
+		if strings.ToLower(longURL.Scheme) != "http" && strings.ToLower(longURL.Scheme) != "https" {
+			w.WriteHeader(http.StatusBadRequest)
+			errMsg, _ := json.Marshal(errorResp{Msg: "requested url is not a http or https url"})
+			w.Write(errMsg)
+			return
+		}
+	}
+
 	var shortenedURL string
 	shortenedURL, err = short.Shorter.Short(shortReq.LongURL)
 	if err != nil {

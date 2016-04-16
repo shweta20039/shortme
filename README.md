@@ -20,6 +20,11 @@ ShortMe is ready to be used in production. Have fun with it. :)
     * **Once this base string is specified, it can not be reconfiged anymore
     otherwise the shortened urls may not be unique and thus may conflict with
      previous ones.**
+* Avoid short url loop
+    * In case we request the short url for an already shortened url by 
+    **shortme**. This is meaningless and will consume more resource in 
+    **shortme**.
+* Short **http** or **https** urls
 
 ### Implementation
 ----
