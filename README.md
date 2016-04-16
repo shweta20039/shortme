@@ -62,7 +62,7 @@ Currently, afaik, there are three ways to implement short url service.
     So, the URL shortening question transforms into making sure we can get a 
     unique integer. 
     ShortMe Use [the method that Flicker use](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/) 
-    to generate a unique integer. 
+    to generate a unique integer(Auto_increment + Replace into + MyISAM). 
     Currently, we only use one backend db to generate sequence. For multiple 
     sequence counter db configuration see [Deploy#Sequence Database]
     (#Sequence Database)
@@ -225,14 +225,14 @@ In two databases situation, we should add the following configuration to each
 * First database
    
 ```
-auto_increment_offset 0
+auto_increment_offset 1
 auto_increment_increment 2
 ```
 
 * Second databse
 
 ```
-auto_increment_offset 1
+auto_increment_offset 2
 auto_increment_increment 2
 ```
 
@@ -245,21 +245,21 @@ insert a record for each table in two databases.
 * First database
 
 ```
-auto_increment_offset 0
+auto_increment_offset 1
 auto_increment_increment 3
 ```
 
 * Second database
 
 ```
-auto_increment_offset 1
+auto_increment_offset 2
 auto_increment_increment 3
 ```
 
 * Third database
 
 ```
-auto_increment_offset 2
+auto_increment_offset 3
 auto_increment_increment 3
 ```
 
