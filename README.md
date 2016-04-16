@@ -25,9 +25,11 @@ ShortMe is ready to be used in production. Have fun with it. :)
 ----
 Currently, afaik, there are three ways to implement short url service.
 * Hash
-    * This way is straightforward. However, every hash function will have a collision when data is large.
+    * This way is straightforward. However, every hash function will have a 
+    collision when data is large.
 * Sample
-    * this way may contain collision, too. See example below (This example, in Python, is only used to demonstrate the collision situation.).
+    * this way may contain collision, too. See example below (This example, 
+    in Python, is only used to demonstrate the collision situation.).
 
     ```python
     >>> import random
@@ -49,7 +51,16 @@ Currently, afaik, there are three ways to implement short url service.
     >>>
     ```
 * Base
-    * Just like converting bytes to base64 ascii, we can convert base10 to base62 and then make a map between **0 .. 61** to **a-zA-Z0-9**. At last, we can get a unique string if we can make sure that the integer is unique. So, the URL shortening question transforms into making sure we can get a unique integer. ShortMe Use [the method that Flicker use](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/) to generate a unique integer. Currently, we only use one backend db to generate sequence.
+    * Just like converting bytes to base64 ascii, we can convert base10 to base62 
+    and then make a map between **0 .. 61** to **a-zA-Z0-9**. At last, we can 
+    get a unique string if we can make sure that the integer is unique. 
+    So, the URL shortening question transforms into making sure we can get a 
+    unique integer. 
+    ShortMe Use [the method that Flicker use](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/) 
+    to generate a unique integer. 
+    Currently, we only use one backend db to generate sequence. For multiple 
+    sequence counter db configuration see [Deploy#Sequence Database]
+    (#Sequence Database)
 
 ### Api
 ----
@@ -173,7 +184,7 @@ After setting up the databases and before running `shortme`, make sure that the 
 ### Deploy
 ----
 
-#### Sequence Database
+#### <a name="Sequence Database"></a>Sequence Database
 ----
 In the [Flickr blog](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/),
 Flickr suggests that we can use two databases with one for even sequence and
