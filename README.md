@@ -1,5 +1,5 @@
 ![](logo.png)  
-![](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ### Introduction
 ----
 ShortMe is a url shortening service written in Golang.  
