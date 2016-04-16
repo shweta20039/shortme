@@ -164,21 +164,41 @@ max_open_conns = 8
 #### Capacity
 ----
 We use an Mysql `unsigned bigint` type to store the sequence counter. According
- to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) we can get `18446744073709551616` different integers. However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) the returned auto increment integer can only be `int64` which will make the sequence smaller than `uint64`. Even through, we can still get `9223372036854775808` different integers and this will be large enough for most service.  
+ to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) 
+ we can get `18446744073709551616` different integers. 
+ However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) 
+ the returned auto increment integer can only be `int64` which will make the 
+ sequence smaller than `uint64`. Even through, we can still get 
+ `9223372036854775808` different integers and this will be large enough 
+ for most service.  
 
 Supposing that  we consume `100,000,000` short urls one day, then the 
 sequence counter can last for `2 ** 63 / 100000000 / 365 = 252695124` years.
 
+#### Short URL Length
+----
+The max string length needed for encoding `2 ** 63` integers will be **11**.
+
+```python
+>>> 62 ** 10
+839299365868340224
+>>> 2 ** 63
+9223372036854775808L
+>>> 62 ** 11
+52036560683837093888L
+```
+
 #### Grant
 ----
-After setting up the databases and before running `shortme`, make sure that the corresponding user and password has been granted. After logging in mysql console, run following sql statement:
+After setting up the databases and before running **shortme**, make sure that 
+the corresponding user and password has been granted. After logging in mysql console, run following sql statement:
 * `grant insert, delete on sequence.* to 'sequence'@'%' identified by 'sequence'`
 * `grant insert on shortme.* to 'shortme_w'@'%' identified by 'shortme_w'`
 * `grant select on shortme.* to 'shortme_r'@'%' identified by 'shortme_r'`
 
 #### Run
 ----
-* make sure that `static` directory will be at the same directory as `shortme`
+* make sure that `static` directory will be at the same directory as **shortme**
 * `./shortme -c config.conf`
 
 ### Deploy
