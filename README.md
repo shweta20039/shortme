@@ -1,5 +1,6 @@
 ![](logo.png)  
 ![](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![](https://img.shields.io/badge/LICENSE-AGPL-blue.svg)
 ### Introduction
 ----
 ShortMe is a url shortening service written in Golang.  
@@ -279,4 +280,3 @@ for i := range N {
 
 ```
 So, sequence generator can be horizontally scalable.
-
