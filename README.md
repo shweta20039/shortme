@@ -280,3 +280,35 @@ for i := range N {
 
 ```
 So, sequence generator can be horizontally scalable.
+
+#### Shard
+----
+With short urls increasing, many records are stored in one table. This
+ is not an optimal mysql practice. In this case we can simply shard table to 
+ bypass this problem. 
+ 
+For example, we can shard according to the **base integer** using **modula hash
+ algorithm**. This has a good distribution between tables. We can use **100** 
+ **short** tables with names like **short_00/short_01/short_02/..
+ ./short_99**. we can use pseudo code blow to determine which is the 
+ table to store the short url record.
+ 
+ ```
+ baseInteger := sequence.NextSequence()
+ tableName := fmt.Sprintf("short_%s", baseInteger % 100) 
+ ```
+ 
+ There are many table sharding algorithms, we can shard table according to 
+ range id, user name and so on. If we use user name as the criteria to shard 
+ table, we can do some aggregate algorithm like how many records a user has 
+ created easily. This may also has some drawbacks such as if user **Lily** 
+ and user **Lucy** are sharded to different tables and **Lily** shorts about 
+ **1k** urls **Lucy** shorts about **1M** urls, then we may encounter the 
+ unbalance hash problem, i.e., some tables contains more records than others.
+ 
+In conclusion, there are many factors to consider before we can make a 
+decision which hash algorithm to use.
+
+Currently, **shortme** do not contain any shard functionality. If you need 
+it, you can read the source code about **shortme** and add the feature easily
+. :)
