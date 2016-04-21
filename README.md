@@ -1,6 +1,7 @@
 ![](logo.png)  
 ![](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![](https://img.shields.io/badge/LICENSE-AGPL-blue.svg)
+[![Build Status](https://travis-ci.org/andyxning/shortme.svg?branch=master)](https://travis-ci.org/andyxning/shortme)
 ### Introduction
 ----
 ShortMe is a url shortening service written in Golang.  
@@ -18,12 +19,12 @@ ShortMe is ready to be used in production. Have fun with it. :)
     .1:3030/version`, version info will be returned rather the long url
     corresponding to the short url "version".
 * Base string config in configuration file
-    * **Once this base string is specified, it can not be reconfiged anymore
+    * **Once this base string is specified, it can not be reconfigured anymore
     otherwise the shortened urls may not be unique and thus may conflict with
      previous ones.**
 * Avoid short url loop
-    * In case we request the short url for an already shortened url by 
-    **shortme**. This is meaningless and will consume more resource in 
+    * In case we request the short url for an already shortened url by
+    **shortme**. This is meaningless and will consume more resource in
     **shortme**.
 * Short **http** or **https** urls
 
@@ -31,10 +32,10 @@ ShortMe is ready to be used in production. Have fun with it. :)
 ----
 Currently, afaik, there are three ways to implement short url service.
 * Hash
-    * This way is straightforward. However, every hash function will have a 
+    * This way is straightforward. However, every hash function will have a
     collision when data is large.
 * Sample
-    * this way may contain collision, too. See example below (This example, 
+    * this way may contain collision, too. See example below (This example,
     in Python, is only used to demonstrate the collision situation.).
 
     ```python
@@ -57,14 +58,14 @@ Currently, afaik, there are three ways to implement short url service.
     >>>
     ```
 * Base
-    * Just like converting bytes to base64 ascii, we can convert base10 to base62 
-    and then make a map between **0 .. 61** to **a-zA-Z0-9**. At last, we can 
-    get a unique string if we can make sure that the integer is unique. 
-    So, the URL shortening question transforms into making sure we can get a 
-    unique integer. 
-    ShortMe Use [the method that Flicker use](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/) 
-    to generate a unique integer(Auto_increment + Replace into + MyISAM). 
-    Currently, we only use one backend db to generate sequence. For multiple 
+    * Just like converting bytes to base64 ascii, we can convert base10 to base62
+    and then make a map between **0 .. 61** to **a-zA-Z0-9**. At last, we can
+    get a unique string if we can make sure that the integer is unique.
+    So, the URL shortening question transforms into making sure we can get a
+    unique integer.
+    ShortMe Use [the method that Flicker use](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/)
+    to generate a unique integer(Auto_increment + Replace into + MyISAM).
+    Currently, we only use one backend db to generate sequence. For multiple
     sequence counter db configuration see [Deploy#Sequence Database]
     (#Sequence Database)
 
@@ -170,15 +171,15 @@ max_open_conns = 8
 #### Capacity
 ----
 We use an Mysql `unsigned bigint` type to store the sequence counter. According
- to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html) 
- we can get `18446744073709551616` different integers. 
- However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId) 
- the returned auto increment integer can only be `int64` which will make the 
- sequence smaller than `uint64`. Even through, we can still get 
- `9223372036854775808` different integers and this will be large enough 
+ to the [Mysql doc](http://dev.mysql.com/doc/refman/5.7/en/integer-types.html)
+ we can get `18446744073709551616` different integers.
+ However, according to [Golang doc about `LastInsertId`](https://golang.org/pkg/database/sql/driver/#RowsAffected.LastInsertId)
+ the returned auto increment integer can only be `int64` which will make the
+ sequence smaller than `uint64`. Even through, we can still get
+ `9223372036854775808` different integers and this will be large enough
  for most service.  
 
-Supposing that  we consume `100,000,000` short urls one day, then the 
+Supposing that  we consume `100,000,000` short urls one day, then the
 sequence counter can last for `2 ** 63 / 100000000 / 365 = 252695124` years.
 
 #### Short URL Length
@@ -196,7 +197,7 @@ The max string length needed for encoding `2 ** 63` integers will be **11**.
 
 #### Grant
 ----
-After setting up the databases and before running **shortme**, make sure that 
+After setting up the databases and before running **shortme**, make sure that
 the corresponding user and password has been granted. After logging in mysql console, run following sql statement:
 * `grant insert, delete on sequence.* to 'sequence'@'%' identified by 'sequence'`
 * `grant insert on shortme.* to 'shortme_w'@'%' identified by 'shortme_w'`
@@ -216,15 +217,15 @@ In the [Flickr blog](http://code.flickr.net/2010/02/08/ticket-servers-distribute
 Flickr suggests that we can use two databases with one for even sequence and
 the other one for odd sequence. This will make sequence generator being more
 available in case one database is down and will also spread the load about
-generate sequence. After splitting sequence db from one to more, we can use 
-[HaProxy](http://www.haproxy.org/) as a reverse proxy and thus more sequence 
-databases can be used as one. As for load balance algorithm, i think **round 
+generate sequence. After splitting sequence db from one to more, we can use
+[HaProxy](http://www.haproxy.org/) as a reverse proxy and thus more sequence
+databases can be used as one. As for load balance algorithm, i think **round
 robin** is good enough for this situation.
 
 In two databases situation, we should add the following configuration to each
  database configuration file.
 * First database
-   
+
 ```
 auto_increment_offset 1
 auto_increment_increment 2
@@ -237,11 +238,11 @@ auto_increment_offset 2
 auto_increment_increment 2
 ```
 
-Then each time to generate a sequence counter, we can execute below sql 
+Then each time to generate a sequence counter, we can execute below sql
 statement:  
 `replace into sequence(stub) values("sequence")`
 
-In cases we use three databases as sequence counter generator, we should 
+In cases we use three databases as sequence counter generator, we should
 insert a record for each table in two databases.
 * First database
 
@@ -264,17 +265,17 @@ auto_increment_offset 3
 auto_increment_increment 3
 ```
 
-Then each time to generate a sequence counter, we can execute below sql 
+Then each time to generate a sequence counter, we can execute below sql
 statement:  
 `replace into sequence(stub) values("sequence")`
 
-Ok, i think you get the point. When using `N` databases to generate sequence 
-counter, configuration for each database configuration file will just 
+Ok, i think you get the point. When using `N` databases to generate sequence
+counter, configuration for each database configuration file will just
 like below:
 
 ```
 for i := range N {
-    add "auto_increment_offset i" to config file 
+    add "auto_increment_offset i" to config file
     add "auto_increment_increment N" to config file
 }
 
@@ -284,31 +285,27 @@ So, sequence generator can be horizontally scalable.
 #### Shard
 ----
 With short urls increasing, many records are stored in one table. This
- is not an optimal mysql practice. In this case we can simply shard table to 
- bypass this problem. 
- 
+ is not an optimal mysql practice. In this case we can simply shard table to
+ bypass this problem.
+
 For example, we can shard according to the **base integer** using **modula hash
- algorithm**. This has a good distribution between tables. We can use **100** 
+ algorithm**. This has a good distribution between tables. We can use **100**
  **short** tables with names like **short_00/short_01/short_02/..
- ./short_99**. we can use pseudo code blow to determine which is the 
+ ./short_99**. we can use pseudo code blow to determine which is the
  table to store the short url record.
- 
+
  ```
  baseInteger := sequence.NextSequence()
- tableName := fmt.Sprintf("short_%s", baseInteger % 100) 
+ tableName := fmt.Sprintf("short_%s", baseInteger % 100)
  ```
- 
- There are many table sharding algorithms, we can shard table according to 
- range id, user name and so on. If we use user name as the criteria to shard 
- table, we can do some aggregate algorithm like how many records a user has 
- created easily. This may also has some drawbacks such as if user **Lily** 
- and user **Lucy** are sharded to different tables and **Lily** shorts about 
- **1k** urls **Lucy** shorts about **1M** urls, then we may encounter the 
- unbalance hash problem, i.e., some tables contains more records than others.
- 
-In conclusion, there are many factors to consider before we can make a 
-decision which hash algorithm to use.
 
-Currently, **shortme** do not contain any shard functionality. If you need 
-it, you can read the source code about **shortme** and add the feature easily
-. :)
+ There are many table sharding algorithms, we can shard table according to
+ range id, user name and so on. If we use user name as the criteria to shard
+ table, we can do some aggregate algorithm like how many records a user has
+ created easily. This may also has some drawbacks such as if user **Lily**
+ and user **Lucy** are sharded to different tables and **Lily** shorts about
+ **1k** urls **Lucy** shorts about **1M** urls, then we may encounter the
+ unbalance hash problem, i.e., some tables contains more records than others.
+
+In conclusion, there are many factors to consider before we can make a
+decision which hash algorithm to use.
