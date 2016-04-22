@@ -4,13 +4,18 @@ import (
 	"math"
 	"testing"
 
-	"github.com/andyxning/shortme/constant"
 	"github.com/andyxning/shortme/base"
+	"github.com/andyxning/shortme/conf"
 )
+
+func init() {
+	conf.Conf.Common.BaseString = "Ds3K9ZNvWmHcakr1oPnxh4qpMEzAye8wX5IdJ2LFujUgtC07lOTb6GYBQViSfR"
+	conf.Conf.Common.BaseStringLength = uint64(len(conf.Conf.Common.BaseString))
+}
 
 func Test_Int2String_Min_UInt64(t *testing.T) {
 	var uint64Value uint64 = 0
-	var expectedShortURL string = string(constant.BaseString[0])
+	var expectedShortURL string = string(conf.Conf.Common.BaseString[0])
 	if shortURL := base.Int2String(uint64Value); shortURL == expectedShortURL {
 		t.Logf("Min Integer %v passes Int2String", uint64Value)
 	} else {
@@ -64,7 +69,7 @@ func Test_Int2String_Max_UInt64(t *testing.T) {
 
 func Test_String2Int_With_First_Char(t *testing.T) {
 	var (
-		shortURL string = string(constant.BaseString[0])
+		shortURL string = string(conf.Conf.Common.BaseString[0])
 		expectedSeq uint64 = 0
 	)
 
