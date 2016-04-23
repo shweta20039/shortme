@@ -1,5 +1,5 @@
 ![](logo.png)  
-![](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![](https://img.shields.io/badge/version-1.2.0-blue.svg)
 ![](https://img.shields.io/badge/LICENSE-AGPL-blue.svg)
 [![Build Status](https://travis-ci.org/andyxning/shortme.svg?branch=master)](https://travis-ci.org/andyxning/shortme)
 ### Introduction
