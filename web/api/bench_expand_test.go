@@ -39,7 +39,7 @@ func BenchmarkExpand(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		req, err := http.NewRequest(
 			"GET",
-			fmt.Sprintf("http://127.0.0.1:3030/%s", shortURL),
+			fmt.Sprintf("%v", shortURL),
 			nil,
 		)
 		if err != nil {
@@ -54,6 +54,8 @@ func BenchmarkExpand(b *testing.B) {
 		}
 
 		if resp.StatusCode != http.StatusTemporaryRedirect {
+			b.Log(shortURL)
+			b.Log(resp.Request.URL)
 			b.Fatalf("http response status: %v", resp.StatusCode)
 		}
 	}

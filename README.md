@@ -109,6 +109,16 @@ Currently, afaik, there are three ways to implement short url service.
             * Connection #0 to host 127.0.0.1 left intact
         ```
 
+### Web
+----
+The web interface mainly used to make url shorting service more intuitively.
+
+For **short** option, the shorted url, shorted url qr code and the 
+corresponding long page is shown.
+
+For **expand** option, the expanded url, expanded url qr code and the 
+corresponding expanded page is shown. 
+
 ### Install
 ----
 #### Dependency
@@ -322,3 +332,9 @@ For example, we can shard according to the **base integer** using **modula hash
 
 In conclusion, there are many factors to consider before we can make a
 decision which hash algorithm to use.
+
+
+### Problems
+----
+* long url may make the generated qr code unreadable. I have test this in my 
+self phone. This remains to be tested more meticulous.  

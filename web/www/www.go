@@ -1,24 +1,15 @@
-package api
+package www
 
 import (
 	"log"
 	"net/http"
 	"html/template"
-	"encoding/json"
-
-	"github.com/andyxning/shortme/conf"
 )
 
-func checkVersion(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	versionInfo, _ := json.Marshal(version{Version: conf.Version})
-	w.Write(versionInfo)
-}
-
-func checkHealth(w http.ResponseWriter, r *http.Request) {
-	tpl := template.New("health.html")
+func Index(w http.ResponseWriter, r *http.Request) {
+	tpl := template.New("index.html")
 	var err error
-	tpl, err = tpl.ParseFiles("static/template/health.html")
+	tpl, err = tpl.ParseFiles("template/index.html")
 	if err != nil {
 		log.Printf("parse template error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)

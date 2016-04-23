@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/andyxning/shortme/conf"
-	"github.com/andyxning/shortme/api"
+	"github.com/andyxning/shortme/web"
 	"github.com/andyxning/shortme/short"
 )
 
@@ -29,5 +29,5 @@ func main() {
 	short.Start()
 
 	// api
-	api.Start()
+	web.Start()
 }

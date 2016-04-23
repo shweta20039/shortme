@@ -32,6 +32,7 @@ type common struct {
 	BaseString string `toml:"base_string"`
 	BaseStringLength uint64
 	DomainName string `toml:"domain_name"`
+	Schema string `toml:"schema"`
 }
 
 type config struct {

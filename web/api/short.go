@@ -2,6 +2,7 @@ package api
 
 import (
 	"log"
+	"strings"
 	"net/url"
 	"net/http"
 	"io/ioutil"
@@ -11,10 +12,9 @@ import (
 	"github.com/andyxning/shortme/conf"
 
 	"github.com/gorilla/mux"
-	"strings"
 )
 
-func redirect(w http.ResponseWriter, r *http.Request) {
+func Redirect(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	shortededURL := vars["shortenedURL"]
 
@@ -25,12 +25,16 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 		return
 	} else {
-		w.Header().Set("Location", longURL)
-		w.WriteHeader(http.StatusTemporaryRedirect)
+		if len(longURL) != 0 {
+			w.Header().Set("Location", longURL)
+			w.WriteHeader(http.StatusTemporaryRedirect)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
+		}
 	}
 }
 
-func shortURL(w http.ResponseWriter, r *http.Request) {
+func ShortURL(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -76,6 +80,11 @@ func shortURL(w http.ResponseWriter, r *http.Request) {
 
 	var shortenedURL string
 	shortenedURL, err = short.Shorter.Short(shortReq.LongURL)
+	shortenedURL = (&url.URL{
+		Scheme: conf.Conf.Common.Schema,
+		Host: conf.Conf.Common.DomainName,
+		Path: shortenedURL,
+	}).String()
 	if err != nil {
 		log.Printf("short url error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -88,7 +97,7 @@ func shortURL(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func expandURL(w http.ResponseWriter, r *http.Request) {
+func ExpandURL(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -110,28 +119,26 @@ func expandURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var expandedURL string
-	expandedURL, err = short.Shorter.Expand(expandReq.ShortURL)
+	var shortURL *url.URL
+	shortURL, err = url.Parse(expandReq.ShortURL)
 	if err != nil {
-		log.Printf("expand url error. %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
+		log.Printf(`"%v" is not a valid url`, expandReq.ShortURL)
+		w.WriteHeader(http.StatusBadRequest)
+		errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusBadRequest)})
 		w.Write(errMsg)
 		return
 	} else {
-		expandResp, _ := json.Marshal(expandResp{LongURL: expandedURL})
-		w.Write(expandResp)
+		var expandedURL string
+		expandedURL, err = short.Shorter.Expand(strings.TrimLeft(shortURL.Path, "/"))
+		if err != nil {
+			log.Printf("expand url error. %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			errMsg, _ := json.Marshal(errorResp{Msg: http.StatusText(http.StatusInternalServerError)})
+			w.Write(errMsg)
+			return
+		} else {
+			expandResp, _ := json.Marshal(expandResp{LongURL: expandedURL})
+			w.Write(expandResp)
+		}
 	}
-}
-
-
-func Start() {
-	log.Println("api starts")
-	r := mux.NewRouter()
-	r.HandleFunc("/version", checkVersion).Methods(http.MethodGet)
-	r.HandleFunc("/health", checkHealth).Methods(http.MethodGet)
-	r.HandleFunc("/short", shortURL).Methods(http.MethodPost).HeadersRegexp("Content-Type",	"application/json")
-	r.HandleFunc("/expand", expandURL).Methods(http.MethodPost).HeadersRegexp("Content-Type", "application/json")
-	r.HandleFunc("/{shortenedURL:[a-zA-Z0-9]{1,11}}", redirect).Methods(http.MethodGet)
-	log.Fatal(http.ListenAndServe(conf.Conf.Http.Listen, r))
 }
