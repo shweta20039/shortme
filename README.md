@@ -119,6 +119,8 @@ corresponding long page is shown.
 For **expand** option, the expanded url, expanded url qr code and the 
 corresponding expanded page is shown. 
 
+![](shortme_record.gif)
+
 ### Install
 ----
 #### Dependency
