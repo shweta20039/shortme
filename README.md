@@ -12,6 +12,7 @@ ShortMe is ready to be used in production. Have fun with it. :)
 ----
 * Convert same long urls to different short urls.
 * Api support
+* Web support
 * Short url black list
     * To avoid some words, like `f**k` and `stupid`
     * To make sure that apis such as `/version` and `/health` will only be
