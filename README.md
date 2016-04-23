@@ -167,6 +167,19 @@ max_idle_conns = 8
 
 # Mysql connection pool max open connection
 max_open_conns = 8
+
+[common]
+# short urls that will be filtered to use
+black_short_urls = ["version","health","short","expand","css","js","fuck","stupid"]
+
+# Base string used to generate short url
+base_string = "Ds3K9ZNvWmHcakr1oPnxh4qpMEzAye8wX5IdJ2LFujUgtC07lOTb6GYBQViSfR"
+
+# Short url service domain name. This is used to filter short url loop.
+domain_name = "short.me:3030"
+
+# Short url service schema: http or https.
+schema = "http"
 ```
 #### Capacity
 ----
