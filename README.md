@@ -336,8 +336,19 @@ For example, we can shard according to the **base integer** using **modula hash
 In conclusion, there are many factors to consider before we can make a
 decision which hash algorithm to use.
 
+#### Statistics
+----
+Sometimes we may want to make some statistics about hit number, UA(User 
+Agent), original IP and so on. 
+
+A recommended way to deploy **shortme** is to use it behind a reverse proxy 
+server such as **Nginx**. Under this way, the statistics info can be analysed
+ by analysing the access log of **Nginx**. This is can be accomplished by 
+ `awk` or more trending log analyse stack [`ELK`](https://www.elastic.co/).
 
 ### Problems
 ----
 * long url may make the generated qr code unreadable. I have test this in my 
 self phone. This remains to be tested more meticulous.  
+* One demand about customizing the short url can not be done easily currently
+ in **shortme** according to the id generation logic. Let's make it happen. :)
