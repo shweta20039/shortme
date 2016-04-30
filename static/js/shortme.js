@@ -27,42 +27,41 @@ function Short(longURLID) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(JSON.parse(jqXHR.responseText).msg);
-        },
-        async: false
-    });
+        }
+    }).always(function() {
+        if (shortURL === "") {
+            return
+        }
 
-    if (shortURL === "") {
-        return
-    }
+        // add blank lines
+        var blankList = document.getElementById("shortURLBlankLine");
+        if (!blankList.hasChildNodes()) {
+            var lineBreak = document.createElement("br");
+            document.getElementById("shortURLBlankLine").appendChild(lineBreak);
+        }
 
-    // add blank lines
-    var blankList = document.getElementById("shortURLBlankLine");
-    if (!blankList.hasChildNodes()) {
-        var lineBreak = document.createElement("br");
-        document.getElementById("shortURLBlankLine").appendChild(lineBreak);
-    }
+        // specify the shortened url
+        document.getElementById("shortenedURL").innerHTML = shortURL;
 
-    // specify the shortened url
-    document.getElementById("shortenedURL").innerHTML = shortURL;
+        // add shortened qr code
+        document.getElementById("shortenedQR").innerHTML = "";
+        DisplayQR("shortenedQR", shortURL);
 
-    // add shortened qr code
-    document.getElementById("shortenedQR").innerHTML = "";
-    DisplayQR("shortenedQR", shortURL);
-
-    // add shortened url preview
-    var shortenedURLPreviewIframe = document.getElementById("shortenedURLPreviewIframe");
-    if (shortenedURLPreviewIframe === null) {
-        var preview = document.createElement("iframe");
-        preview.setAttribute("src", longURL);
-        preview.setAttribute("frameBorder", 0);
-        preview.setAttribute("scrolling", "auto");
-        preview.setAttribute("id", "shortenedURLPreviewIframe");
-        preview.setAttribute("sandbox", "");
-        preview.setAttribute("security", "restricted");
-        document.getElementById("shortenedURLPreview").appendChild(preview);
-    } else {
-        shortenedURLPreviewIframe.setAttribute("src", longURL);
-    }
+        // add shortened url preview
+        var shortenedURLPreviewIframe = document.getElementById("shortenedURLPreviewIframe");
+        if (shortenedURLPreviewIframe === null) {
+            var preview = document.createElement("iframe");
+            preview.setAttribute("src", longURL);
+            preview.setAttribute("frameBorder", 0);
+            preview.setAttribute("scrolling", "auto");
+            preview.setAttribute("id", "shortenedURLPreviewIframe");
+            preview.setAttribute("sandbox", "");
+            preview.setAttribute("security", "restricted");
+            document.getElementById("shortenedURLPreview").appendChild(preview);
+        } else {
+            shortenedURLPreviewIframe.setAttribute("src", longURL);
+        }
+    })
 }
 
 function Expand(shortURLID) {
@@ -86,41 +85,40 @@ function Expand(shortURLID) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(JSON.parse(jqXHR.responseText).msg);
-        },
-        async: false
-    });
+        }
+    }).always(function() {
+        if (longURL === "") {
+            return
+        }
 
-    if (longURL === "") {
-        return
-    }
+        // clear blank lines
+        var blankList = document.getElementById("expandedURLBlankLine");
+        if (!blankList.hasChildNodes()) {
+            var lineBreak = document.createElement("br");
+            document.getElementById("expandedURLBlankLine").appendChild(lineBreak);
+        }
 
-    // clear blank lines
-    var blankList = document.getElementById("expandedURLBlankLine");
-    if (!blankList.hasChildNodes()) {
-        var lineBreak = document.createElement("br");
-        document.getElementById("expandedURLBlankLine").appendChild(lineBreak);
-    }
-
-    // specify the expanded url
-    document.getElementById("expandedURL").innerHTML = longURL;
+        // specify the expanded url
+        document.getElementById("expandedURL").innerHTML = longURL;
 
 
-    // clear expanded qr code
-    document.getElementById("expandedQR").innerHTML = "";
-    DisplayQR("expandedQR", longURL);
+        // clear expanded qr code
+        document.getElementById("expandedQR").innerHTML = "";
+        DisplayQR("expandedQR", longURL);
 
-    // add expanded url preview
-    var expandedURLPreviewIframe = document.getElementById("expandedURLPreviewIframe");
-    if (expandedURLPreviewIframe === null) {
-        var preview = document.createElement("iframe");
-        preview.setAttribute("src", longURL);
-        preview.setAttribute("frameBorder", 0);
-        preview.setAttribute("scrolling", "auto");
-        preview.setAttribute("id", "expandedURLPreviewIframe");
-        preview.setAttribute("sandbox", "");
-        preview.setAttribute("security", "restricted");
-        document.getElementById("expandedURLPreview").appendChild(preview);
-    } else {
-        expandedURLPreviewIframe.setAttribute("src", longURL);
-    }
+        // add expanded url preview
+        var expandedURLPreviewIframe = document.getElementById("expandedURLPreviewIframe");
+        if (expandedURLPreviewIframe === null) {
+            var preview = document.createElement("iframe");
+            preview.setAttribute("src", longURL);
+            preview.setAttribute("frameBorder", 0);
+            preview.setAttribute("scrolling", "auto");
+            preview.setAttribute("id", "expandedURLPreviewIframe");
+            preview.setAttribute("sandbox", "");
+            preview.setAttribute("security", "restricted");
+            document.getElementById("expandedURLPreview").appendChild(preview);
+        } else {
+            expandedURLPreviewIframe.setAttribute("src", longURL);
+        }
+    })
 }
