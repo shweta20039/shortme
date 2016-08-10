@@ -16,9 +16,7 @@ ShortMe is ready to be used in production. Have fun with it. :)
 * Short url black list
     * To avoid some words, like `f**k` and `stupid`
     * To make sure that apis such as `/version` and `/health` will only be
-    used as api not short urls or otherwise when requesting `http://127.0.0
-    .1:3030/version`, version info will be returned rather the long url
-    corresponding to the short url "version".
+    used as api not short urls or otherwise when requesting `http://127.0.0.1:3030/version`, version info will be returned rather the long url corresponding to the short url "version".
 * Base string config in configuration file
     * **Once this base string is specified, it can not be reconfigured anymore
     otherwise the shortened urls may not be unique and thus may conflict with
