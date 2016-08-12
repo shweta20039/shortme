@@ -1,22 +1,21 @@
 package short
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
-	"errors"
-	"database/sql"
 
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/andyxning/shortme/sequence/db"
+	"github.com/andyxning/shortme/base"
 	"github.com/andyxning/shortme/conf"
 	"github.com/andyxning/shortme/sequence"
-	"github.com/andyxning/shortme/base"
+	_ "github.com/andyxning/shortme/sequence/db"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-
 type shorter struct {
-	readDB *sql.DB
-	writeDB *sql.DB
+	readDB   *sql.DB
+	writeDB  *sql.DB
 	sequence sequence.Sequence
 }
 

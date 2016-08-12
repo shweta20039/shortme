@@ -1,14 +1,13 @@
 package db
 
 import (
-	"log"
 	"database/sql"
+	"log"
 
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/andyxning/shortme/sequence"
 	"github.com/andyxning/shortme/conf"
+	"github.com/andyxning/shortme/sequence"
+	_ "github.com/go-sql-driver/mysql"
 )
-
 
 type SequenceDB struct {
 	db *sql.DB

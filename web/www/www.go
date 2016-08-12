@@ -1,9 +1,9 @@
 package www
 
 import (
+	"html/template"
 	"log"
 	"net/http"
-	"html/template"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {

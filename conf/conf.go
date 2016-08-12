@@ -1,18 +1,18 @@
 package conf
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
-	"bytes"
 	"os"
 
 	"github.com/BurntSushi/toml"
 )
 
 type sequenceDB struct {
-	DSN	string `toml:"dsn"`
-	MaxIdleConns int `toml:"max_idle_conns"`
-	MaxOpenConns int `toml:"max_open_conns"`
+	DSN          string `toml:"dsn"`
+	MaxIdleConns int    `toml:"max_idle_conns"`
+	MaxOpenConns int    `toml:"max_open_conns"`
 }
 
 type http struct {
@@ -20,26 +20,26 @@ type http struct {
 }
 
 type shortDB struct {
-	ReadDSN string `toml:"read_dsn"`
-	WriteDSN string `toml:"write_dsn"`
-	MaxIdleConns int `toml:"max_idle_conns"`
-	MaxOpenConns int `toml:"max_open_conns"`
+	ReadDSN      string `toml:"read_dsn"`
+	WriteDSN     string `toml:"write_dsn"`
+	MaxIdleConns int    `toml:"max_idle_conns"`
+	MaxOpenConns int    `toml:"max_open_conns"`
 }
 
 type common struct {
-	BlackShortURLs []string `toml:"black_short_urls"`
+	BlackShortURLs    []string `toml:"black_short_urls"`
 	BlackShortURLsMap map[string]bool
-	BaseString string `toml:"base_string"`
-	BaseStringLength uint64
-	DomainName string `toml:"domain_name"`
-	Schema string `toml:"schema"`
+	BaseString        string `toml:"base_string"`
+	BaseStringLength  uint64
+	DomainName        string `toml:"domain_name"`
+	Schema            string `toml:"schema"`
 }
 
 type config struct {
-	Http http `toml:"http"`
+	Http       http       `toml:"http"`
 	SequenceDB sequenceDB `toml:"sequence_db"`
-	ShortDB shortDB `toml:"short_db"`
-	Common common `toml:"common"`
+	ShortDB    shortDB    `toml:"short_db"`
+	Common     common     `toml:"common"`
 }
 
 var Conf config

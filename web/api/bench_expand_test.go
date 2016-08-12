@@ -1,12 +1,12 @@
 package api
 
 import (
-	"net/http"
 	"bytes"
 	"encoding/json"
-	"testing"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"testing"
 )
 
 // BenchmarkExpand may consume all open files in server. When running this

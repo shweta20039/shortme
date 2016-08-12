@@ -1,15 +1,15 @@
 package api
 
 import (
-	"log"
-	"strings"
-	"net/url"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"strings"
 
-	"github.com/andyxning/shortme/short"
 	"github.com/andyxning/shortme/conf"
+	"github.com/andyxning/shortme/short"
 
 	"github.com/gorilla/mux"
 )
@@ -82,8 +82,8 @@ func ShortURL(w http.ResponseWriter, r *http.Request) {
 	shortenedURL, err = short.Shorter.Short(shortReq.LongURL)
 	shortenedURL = (&url.URL{
 		Scheme: conf.Conf.Common.Schema,
-		Host: conf.Conf.Common.DomainName,
-		Path: shortenedURL,
+		Host:   conf.Conf.Common.DomainName,
+		Path:   shortenedURL,
 	}).String()
 	if err != nil {
 		log.Printf("short url error. %v", err)

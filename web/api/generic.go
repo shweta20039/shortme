@@ -1,10 +1,10 @@
 package api
 
 import (
+	"encoding/json"
+	"html/template"
 	"log"
 	"net/http"
-	"html/template"
-	"encoding/json"
 
 	"github.com/andyxning/shortme/conf"
 )

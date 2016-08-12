@@ -1,9 +1,9 @@
 package api
 
 import (
-	"net/http"
 	"bytes"
 	"encoding/json"
+	"net/http"
 	"testing"
 )
 

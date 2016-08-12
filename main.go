@@ -2,14 +2,13 @@ package main
 
 import (
 	"flag"
-	"os"
 	"fmt"
+	"os"
 
 	"github.com/andyxning/shortme/conf"
-	"github.com/andyxning/shortme/web"
 	"github.com/andyxning/shortme/short"
+	"github.com/andyxning/shortme/web"
 )
-
 
 func main() {
 	cfgFile := flag.String("c", "config.conf", "configuration file")

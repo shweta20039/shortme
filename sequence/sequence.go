@@ -2,16 +2,14 @@ package sequence
 
 import (
 	"fmt"
-	"sync"
 	"sort"
+	"sync"
 )
-
 
 var (
 	sequencesMu sync.RWMutex
-	sequences = map[string]Sequence{}
+	sequences   = map[string]Sequence{}
 )
-
 
 type Sequence interface {
 	// Open opens the sequence generator.

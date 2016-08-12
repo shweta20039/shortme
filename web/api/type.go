@@ -1,6 +1,5 @@
 package api
 
-
 type version struct {
 	Version string `json:"version"`
 }
@@ -10,18 +9,17 @@ type errorResp struct {
 }
 
 type shortReq struct {
-	LongURL	string `json:"longURL"`
+	LongURL string `json:"longURL"`
 }
 
 type shortResp struct {
-	ShortURL	string	`json:"shortURL"`
+	ShortURL string `json:"shortURL"`
 }
 
 type expandReq struct {
-	ShortURL	string	`json:"shortURL"`
+	ShortURL string `json:"shortURL"`
 }
 
 type expandResp struct {
-	LongURL 	string	`json:"longURL"`
+	LongURL string `json:"longURL"`
 }
-

@@ -31,7 +31,7 @@ func String2Int(shortURL string) (seq uint64) {
 	shortURL = reverse(shortURL)
 	for index, char := range shortURL {
 		base := uint64(math.Pow(float64(conf.Conf.Common.BaseStringLength), float64(index)))
-		seq += uint64(strings.Index(conf.Conf.Common.BaseString, string(char)))*base
+		seq += uint64(strings.Index(conf.Conf.Common.BaseString, string(char))) * base
 	}
 	return
 }
