@@ -5,7 +5,7 @@ import (
 	"runtime"
 )
 
-const Version = "1.2.0"
+var Version string
 
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
