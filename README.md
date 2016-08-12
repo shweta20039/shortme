@@ -135,8 +135,7 @@ cd $GOPATH/src/github.com/andyxning
 git clone https://github.com/andyxning/shortme.git
 
 cd shortme
-go get ./...
-go build -o shortme main.go
+make build
 ```
 
 #### Database Schema
