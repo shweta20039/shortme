@@ -8,4 +8,4 @@ install:
   - make dep
 
 script:
-  - make build
+  - make test 

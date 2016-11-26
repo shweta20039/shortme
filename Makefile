@@ -3,7 +3,7 @@ version = 1.2.0
 dep:
 	go get -d ./...
 
-test:
+test: build
 	go test -v ./...
 
 vet:
