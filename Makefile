@@ -6,8 +6,11 @@ dep:
 test:
 	go test -v ./...
 
+vet:
+	go list ./... | grep -v "./vendor*" | xargs go vet
+
 fmt: 
-	find . -type f -name "*.go" | xargs gofmt -s -w
+	find . -type f -name "*.go" | grep -v "./vendor*" | xargs gofmt -s -w
 
 build: dep test fmt
 	go build -ldflags="-X github.com/andyxning/shortme/conf.Version=$(version)" -o shortme main.go
@@ -15,4 +18,4 @@ build: dep test fmt
 clean:
 	rm -f shortme
 
-.PHONY: fmt test dep build clean
+.PHONY: fmt test dep build clean vet
