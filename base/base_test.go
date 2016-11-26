@@ -19,7 +19,7 @@ func Test_Int2String_Min_UInt64(t *testing.T) {
 	if shortURL := base.Int2String(uint64Value); shortURL == expectedShortURL {
 		t.Logf("Min Integer %v passes Int2String", uint64Value)
 	} else {
-		t.Errorf("Min Integer 0 does not pass Int2String. "+
+		t.Errorf("Min Integer %v does not pass Int2String. "+
 			"Expected short	URL: %s, got: %s",
 			uint64Value, expectedShortURL, shortURL)
 	}

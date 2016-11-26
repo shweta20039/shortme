@@ -12,7 +12,7 @@ vet:
 fmt: 
 	find . -type f -name "*.go" | grep -v "./vendor*" | xargs gofmt -s -w
 
-build: dep test fmt
+build: dep vet fmt
 	go build -ldflags="-X github.com/andyxning/shortme/conf.Version=$(version)" -o shortme main.go
 
 clean:

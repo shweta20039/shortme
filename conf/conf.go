@@ -49,7 +49,7 @@ func MustParseConfig(configFile string) {
 		if os.IsNotExist(err) {
 			log.Panicf("configuration file %v does not exist.", configFile)
 		} else {
-			log.Panicf("configuration file %v can not be stated. %v", err)
+			log.Panicf("configuration file %v can not be stated. %v", configFile, err)
 		}
 	} else {
 		if fileInfo.IsDir() {
