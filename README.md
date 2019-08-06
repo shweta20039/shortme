@@ -120,6 +120,13 @@ corresponding expanded page is shown.
 
 ![](shortme_record.gif)
 
+
+### Superstratum Projects
+Projects that use `short-me`.
+
+* [short-url](https://github.com/sillyhatxu/short-url)
+
+
 ### Install
 ----
 #### Dependency
