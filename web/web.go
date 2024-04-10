@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/andyxning/shortme/conf"
-	"github.com/andyxning/shortme/web/api"
-	"github.com/andyxning/shortme/web/www"
+	"github.com/shweta20039/shortme/conf"
+	"github.com/shweta20039/shortme/web/api"
+	"github.com/shweta20039/shortme/web/www"
 
 	"github.com/gorilla/mux"
 )
@@ -19,6 +19,7 @@ func Start() {
 	r.HandleFunc("/health", api.CheckHealth).Methods(http.MethodGet)
 	r.HandleFunc("/short", api.ShortURL).Methods(http.MethodPost).HeadersRegexp("Content-Type", "application/json")
 	r.HandleFunc("/expand", api.ExpandURL).Methods(http.MethodPost).HeadersRegexp("Content-Type", "application/json")
+	r.HandleFunc("/analytics", api.Analytics).Methods(http.MethodPost).HeadersRegexp("Content-Type", "application/json")
 	r.HandleFunc("/{shortenedURL:[a-zA-Z0-9]{1,11}}", api.Redirect).Methods(http.MethodGet)
 
 	r.HandleFunc("/index.html", www.Index).Methods(http.MethodGet)

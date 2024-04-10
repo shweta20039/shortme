@@ -23,3 +23,11 @@ type expandReq struct {
 type expandResp struct {
 	LongURL string `json:"longURL"`
 }
+
+type analytics struct {
+	ShortURL string `json:"shortURL"`
+}
+
+type analyticsResp struct {
+	Count string `json:"count"`
+}

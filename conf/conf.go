@@ -2,7 +2,6 @@ package conf
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -57,7 +56,7 @@ func MustParseConfig(configFile string) {
 		}
 	}
 
-	content, err := ioutil.ReadFile(configFile)
+	content, err := os.ReadFile(configFile)
 	if err != nil {
 		log.Panicf("read configuration file error. %v", err)
 	}

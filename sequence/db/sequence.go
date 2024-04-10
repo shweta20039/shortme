@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/andyxning/shortme/conf"
-	"github.com/andyxning/shortme/sequence"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/shweta20039/shortme/conf"
+	"github.com/shweta20039/shortme/sequence"
 )
 
 type SequenceDB struct {

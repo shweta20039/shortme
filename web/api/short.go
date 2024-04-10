@@ -2,14 +2,14 @@ package api
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 
-	"github.com/andyxning/shortme/conf"
-	"github.com/andyxning/shortme/short"
+	"github.com/shweta20039/shortme/conf"
+	"github.com/shweta20039/shortme/short"
 
 	"github.com/gorilla/mux"
 )
@@ -37,7 +37,7 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 func ShortURL(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("read short request error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -100,7 +100,7 @@ func ShortURL(w http.ResponseWriter, r *http.Request) {
 func ExpandURL(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("read expand request error. %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
